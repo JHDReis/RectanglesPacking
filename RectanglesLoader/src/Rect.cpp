@@ -4,11 +4,11 @@
 
 
 #include "Rect.h"
-Rect::Rect() : _width(0), _height(0), _x(-1), _y(-1), _rotaded(false){
+Rect::Rect() : _width(0), _height(0), _x(0), _y(0), _rotaded(false){
 
 }
 
-Rect::Rect(int width, int height) :  _width(width), _height(height), _x(-1), _y(-1), _rotaded(false){}
+Rect::Rect(int width, int height) :  _width(width), _height(height), _x(0), _y(0), _rotaded(false){}
 
 Rect::Rect(int width, int height, int x, int y) :  _width(width), _height(height), _x(x), _y(y), _rotaded(false) {}
 
@@ -71,8 +71,7 @@ bool Rect::overlaps(const Rect& b) const {
 
 bool Rect::is_contained(const Rect& b) const {
     return _x >= b.x() && _y >= b.y()
-           && x_right() <= b.x_right()
-           && y_bottom() <= b.y_bottom();
+            && x_right() <= b.x_right() && y_bottom() <= b.y_bottom();
 }
 
 

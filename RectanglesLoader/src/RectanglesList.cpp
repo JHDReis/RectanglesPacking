@@ -12,7 +12,7 @@ RectanglesList::RectanglesList() {
 }
 
 void RectanglesList::load(std::vector<Rect> &rectangles) {
-    _rectangles = std::move(rectangles);
+    _rectangles = rectangles;
 
     for(auto const& r : _rectangles){
         _max_x += r.width();
@@ -20,16 +20,20 @@ void RectanglesList::load(std::vector<Rect> &rectangles) {
     }
 }
 
-unsigned long RectanglesList::size() {
+int RectanglesList::size() {
     return _rectangles.size();
 }
 
-unsigned long RectanglesList::max_width() {
+int RectanglesList::max_width() {
     return _max_x;
 }
 
-unsigned long RectanglesList::max_height() {
+int RectanglesList::max_height() {
     return _max_y;
+}
+
+std::vector<Rect> RectanglesList::get_list() {
+    return _rectangles;
 }
 
 

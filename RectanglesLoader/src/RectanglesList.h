@@ -14,14 +14,16 @@ class RectanglesList{
 public:
     RectanglesList();
     void load(std::vector<Rect>& rectangles);
-    unsigned long size();
-    unsigned long max_width();
-    unsigned long max_height();
+    int size();
+    int max_width();
+    int max_height();
+
+    std::vector<Rect> get_list();
 
 private:
     std::vector<Rect> _rectangles;
-    unsigned long _max_x;
-    unsigned long _max_y;
+    int _max_x;
+    int _max_y;
 };
 
 

@@ -21,7 +21,6 @@ public:
     //copy assigment
     Rect& operator=(const Rect& other);
 
-
     //getters
     int width() const {return _width;}
     int height() const {return _height;}
@@ -41,7 +40,6 @@ public:
     void reset(int width, int height, int x, int y);
 
     //stats
-    bool is_set() { return _x>=0 && _y>=0;}
     bool rotate();
     bool is_rotaded() {return _rotaded;}
     bool overlaps(const Rect& b) const;

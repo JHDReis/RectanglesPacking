@@ -16,13 +16,11 @@ class RectLoader {
 public:
     explicit RectLoader(const std::string& filePath);
     std::vector<Rect> load();
-
     std::string get_filepath();
     bool is_valid_file();
 
 private:
     RectLoader() = default;
-
     std::string _filepath;
 };
 

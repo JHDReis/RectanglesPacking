@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.12)
 project(RectangulesPacking)
 
 set(CMAKE_CXX_STANDARD 17)
-
 set(RECT_LOADER_SRC RectanglesLoader/src)
 
 
@@ -13,5 +12,8 @@ add_subdirectory(RectanglesLoaderTests)
 
 add_executable(rectangules_run main.cpp)
 
+add_executable(maxrectsbin_run MaxRectsBin.cpp)
+
 #linking with the library
 TARGET_LINK_LIBRARIES(rectangules_run rectanglesLoader)
+TARGET_LINK_LIBRARIES(maxrectsbin_run rectanglesLoader)

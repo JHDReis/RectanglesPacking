@@ -80,7 +80,7 @@ Rect MaxRectsBinPack::Insert(int width, int height, FreeRectChoiceHeuristic meth
 	return newNode;
 }
 
-void MaxRectsBinPack::Insert(std::vector<RectSize> &rects, std::vector<Rect> &dst, FreeRectChoiceHeuristic method)
+void MaxRectsBinPack::Insert(std::vector<Rect> &rects, std::vector<Rect> &dst, FreeRectChoiceHeuristic method)
 {
 	dst.clear();
 
@@ -95,7 +95,7 @@ void MaxRectsBinPack::Insert(std::vector<RectSize> &rects, std::vector<Rect> &ds
 		{
 			int score1;
 			int score2;
-			Rect newNode = ScoreRect(rects[i].width, rects[i].height, method, score1, score2);
+			Rect newNode = ScoreRect(rects[i].width(), rects[i].height(), method, score1, score2);
 
 			if (score1 < bestScore1 || (score1 == bestScore1 && score2 < bestScore2))
 			{
@@ -247,7 +247,7 @@ Rect MaxRectsBinPack::FindPositionForNewNodeBestShortSideFit(int width, int heig
 
 			if (flippedShortSideFit < bestShortSideFit || (flippedShortSideFit == bestShortSideFit && flippedLongSideFit < bestLongSideFit))
 			{
-                bestNode.reset(width, height, freeRectangles[i].x(), freeRectangles[i].y());
+                bestNode.reset(height, width, freeRectangles[i].x(), freeRectangles[i].y());
 				bestShortSideFit = flippedShortSideFit;
 				bestLongSideFit = flippedLongSideFit;
 			}
@@ -408,7 +408,7 @@ Rect MaxRectsBinPack::FindPositionForNewNodeContactPoint(int width, int height, 
 bool MaxRectsBinPack::SplitFreeNode(Rect freeNode, const Rect &usedNode)
 {
 	// Test with SAT if the rectangles even intersect.
-	if(usedNode.overlaps(freeNode))
+	if(!usedNode.overlaps(freeNode))
 	    return false;
 //	if (usedNode.x() >= freeNode.x_right() || usedNode.x_right() <= freeNode.x() ||
 //		usedNode.y() >= freeNode.y_bottom() || usedNode.y_bottom() <= freeNode.y())

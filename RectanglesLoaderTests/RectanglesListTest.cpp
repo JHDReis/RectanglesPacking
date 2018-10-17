@@ -37,7 +37,7 @@ TEST_F(RectanglesListTest, rectangles_is_moving) {
     rList.load(_rectangle1);
 
     //assert
-    EXPECT_EQ(_rectangle1.size(), 0);
+    EXPECT_EQ(_rectangle1.size(), 3);
 }
 
 

@@ -33,8 +33,8 @@ TEST_F(RectClassTesting, default_constructor_values) {
     Rect r;
     ASSERT_EQ(r.height(), 0);
     ASSERT_EQ(r.width(), 0);
-    ASSERT_EQ(r.x(), -1);
-    ASSERT_EQ(r.y(), -1);
+    ASSERT_EQ(r.x(), 0);
+    ASSERT_EQ(r.y(), 0);
 }
 
 
@@ -50,6 +50,13 @@ TEST_F(RectClassTesting, width_is_4) {
 }
 
 
+TEST_F(RectClassTesting, change_dimensions) {
+    _rect.set_dimension(10, 5);
+    ASSERT_EQ(_rect.width(), 10);
+    ASSERT_EQ(_rect.height(), 5);
+}
+
+
 TEST_F(RectClassTesting, set_x_0_y_0) {
     _rect.set_position(0, 0);
     ASSERT_EQ(_rect.x(), 0);
@@ -57,15 +64,12 @@ TEST_F(RectClassTesting, set_x_0_y_0) {
 }
 
 
-TEST_F(RectClassTesting, rectangle_is_not_set) {
-    _rect.set_position(-1, -1);
-    ASSERT_FALSE(_rect.is_set());
-}
-
-
-TEST_F(RectClassTesting, rectangle_is_set) {
-    _rect.set_position(1, 0);
-    ASSERT_TRUE(_rect.is_set());
+TEST_F(RectClassTesting, reset_rectangle) {
+    _rect.reset(2,1,1,1);
+    ASSERT_EQ(_rect.width(), 2);
+    ASSERT_EQ(_rect.height(), 1);
+    ASSERT_EQ(_rect.x(), 1);
+    ASSERT_EQ(_rect.x(), 1);
 }
 
 
@@ -133,6 +137,44 @@ TEST_F(RectClassTesting, rectangle_is_overlaps_in_the_y) {
     ASSERT_TRUE(a.overlaps(b));
 }
 
+
+TEST_F(RectClassTesting, rectangle_is_contained_same) {
+    //prepare
+    Rect a(1,2);
+    Rect b(1,2);
+
+    //set same position
+    a.set_position(0, 0);
+    b.set_position(0, 0);
+    //assert
+    ASSERT_TRUE(a.is_contained(b));
+}
+
+
+TEST_F(RectClassTesting, rectangle_a_is_contained_in_b) {
+    //prepare
+    Rect a(2,1);
+    Rect b(5,3);
+
+    //set same position
+    a.set_position(1, 1);
+    b.set_position(0, 0);
+    //assert
+    ASSERT_TRUE(a.is_contained(b));
+}
+
+
+TEST_F(RectClassTesting, rectangle_b_is_not_contained_in_a) {
+    //prepare
+    Rect a(2,1);
+    Rect b(5,3);
+
+    //set same position
+    a.set_position(1, 1);
+    b.set_position(0, 0);
+    //assert
+    ASSERT_FALSE(b.is_contained(a));
+}
 
 
 

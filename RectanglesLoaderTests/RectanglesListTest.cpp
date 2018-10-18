@@ -29,13 +29,13 @@ public:
 };
 
 TEST_F(RectanglesListTest, calculate_max_width) {
-    int maxwidth = max_width(_rectangle1);
+    int maxwidth = sum_width(_rectangle1);
     EXPECT_EQ(maxwidth, 9);
 }
 
 
 TEST_F(RectanglesListTest, calculate_max_height) {
-    int maxHeight = max_height(_rectangle1);
+    int maxHeight = sum_height(_rectangle1);
     EXPECT_EQ(maxHeight, 3);
 }
 

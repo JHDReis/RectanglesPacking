@@ -8,9 +8,13 @@
 #include <vector>
 class Rect;
 
-int max_width(const std::vector<Rect> & rectangles);
+int biggest_width(const std::vector<Rect> &rectangles);
 
-int max_height(const std::vector<Rect> &rectangles);
+int biggest_height(const std::vector<Rect> &rectangles);
+
+int sum_width(const std::vector<Rect> &rectangles);
+
+int sum_height(const std::vector<Rect> &rectangles);
 
 int max_right(const std::vector<Rect> &rectangles);
 

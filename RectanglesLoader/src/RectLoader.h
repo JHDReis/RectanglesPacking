@@ -5,6 +5,7 @@
 #ifndef RECTANGLESPACKING_RECTLOADER_H
 #define RECTANGLESPACKING_RECTLOADER_H
 
+#include <random>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -16,6 +17,7 @@ class RectLoader {
 public:
     explicit RectLoader(const std::string& filePath);
     std::vector<Rect> load();
+    static std::vector<Rect> load_rand(int max_rectangles, int max_rand = 100);
     std::string get_filepath();
     bool is_valid_file();
 

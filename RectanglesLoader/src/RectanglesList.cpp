@@ -6,8 +6,28 @@
 #include "Rect.h"
 #include <numeric>
 #include <algorithm>
+#include <iterator>
 
-int max_width(const std::vector<Rect> &rectangles) {
+int biggest_width(const std::vector<Rect> &rectangles) {
+     auto f = std::max_element(rectangles.begin(), rectangles.end(),
+                     [](Rect a, Rect b)
+                    {
+                        return a.width() < b.width();
+                    });
+    return f->width();
+}
+
+
+int biggest_height(const std::vector<Rect> &rectangles) {
+    auto f = std::max_element(rectangles.begin(), rectangles.end(),
+                              [](Rect a, Rect b)
+                              {
+                                  return a.height() < b.height();
+                              });
+    return f->height();
+}
+
+int sum_width(const std::vector<Rect> &rectangles) {
     return std::accumulate(rectangles.begin(), rectangles.end(), 0,
                             [](int a, Rect b)
                             {
@@ -16,7 +36,7 @@ int max_width(const std::vector<Rect> &rectangles) {
                             });
 }
 
-int max_height(const std::vector<Rect> &rectangles) {
+int sum_height(const std::vector<Rect> &rectangles) {
     return std::accumulate(rectangles.begin(), rectangles.end(), 0,
                             [](int a, Rect b)
                             {
@@ -55,5 +75,7 @@ void sort_area_dec(std::vector<Rect> &rectangles) {
                                 return b.area() < a.area();
                             });
 }
+
+
 
 

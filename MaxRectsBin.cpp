@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "MaxRectsBinPack.h"
+#include "RectangleBinPack/MaxRectsBinPack.h"
 #include "RectLoader.h"
 #include "RectanglesList.h"
 
@@ -66,8 +66,8 @@ int main() {
 
 rbp::MaxRectsBinPack OneByOneMaxPack(const std::vector<Rect> &rectList, rbp::MaxRectsBinPack::FreeRectChoiceHeuristic method) {
     rbp::MaxRectsBinPack bin;
-    int maxWidth = max_width(rectList);
-    int maxHeight = max_height(rectList);
+    int maxWidth = sum_width(rectList);
+    int maxHeight = sum_height(rectList);
 
     if(maxHeight > maxWidth)
         maxWidth = maxHeight;

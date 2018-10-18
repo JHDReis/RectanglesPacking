@@ -5,6 +5,7 @@
 
 #include "gtest/gtest.h"
 #include "Rect.h"
+#include "RectanglesList.h"
 #include "RectLoader.h"
 
 
@@ -38,7 +39,6 @@ TEST_F(RectLoaderTest, rectLoader) {
    ASSERT_EQ(_test1file, rl.get_filepath());
 }
 
-
 TEST_F(RectLoaderTest, file_exists) {
     //set
     RectLoader rl(_test1file);
@@ -47,7 +47,6 @@ TEST_F(RectLoaderTest, file_exists) {
     ASSERT_TRUE(rl.is_valid_file());
 }
 
-
 TEST_F(RectLoaderTest, file_does_not_exist) {
     //set
     RectLoader rl("fail_test.txt");
@@ -55,7 +54,6 @@ TEST_F(RectLoaderTest, file_does_not_exist) {
     //assert
     ASSERT_FALSE(rl.is_valid_file());
 }
-
 
 TEST_F(RectLoaderTest, read_file) {
     //prepare
@@ -67,7 +65,6 @@ TEST_F(RectLoaderTest, read_file) {
     //assert
     ASSERT_EQ(result.size(), 6);
 }
-
 
 TEST_F(RectLoaderTest, read_file_have_negatives) {
     //prepare
@@ -89,4 +86,12 @@ TEST_F(RectLoaderTest, read_file_consecutive_values) {
 
     //assert
     ASSERT_EQ(result.size(), 6);
+}
+
+TEST_F(RectLoaderTest, get_random_of_size_8) {
+    auto v = RectLoader::load_rand(8);
+    EXPECT_EQ(v.size(), 8);
+
+    EXPECT_LE(biggest_width(v), 100);
+    EXPECT_LE(biggest_height(v), 100);
 }

@@ -3,68 +3,145 @@
 //
 
 #include <iostream>
+#include <limits>
 #include "RectangleBinPack/MaxRectsBinPack.h"
 #include "RectLoader.h"
 #include "RectanglesList.h"
 
-rbp::MaxRectsBinPack OneByOneMaxPack(const std::vector<Rect> &rectList, rbp::MaxRectsBinPack::FreeRectChoiceHeuristic method);
+rbp::MaxRectsBinPack OneByOneMaxPack(const std::vector<Rect> &rectList
+        , rbp::MaxRectsBinPack::FreeRectChoiceHeuristic method
+        , bool allow_flip = true);
 
 int main() {
     std::cout << "Max Rectangles Bin Algorithm!" << std::endl;
+    std::cout << "Loading from file (0) or loading from random (1)" <<std::endl;
+    int choice;
+    std::cin>>choice;
 
-    //1st load the test rectangles
-    //RectLoader loader("../Files/VerySimpleTest.txt");
-    RectLoader loader("../Files/20_rectangles.txt");
+    std::vector<Rect> rectList;
+    if(choice == 0) {
+        RectLoader loader("../Files/VerySimpleTest.txt");
+        //RectLoader loader("../Files/20_rectangles.txt");
 
-    if(!loader.is_valid_file()) {
-        std::cout << "File Not Valid!" << std::endl;
+        if(!loader.is_valid_file()) {
+            std::cout << "File Not Valid!" << std::endl;
+            return 1;
+        }
+        rectList = loader.load();
+    }
+    else if(choice == 1) {
+        rectList = RectLoader::load_rand(100);
+    } else
         return 1;
+
+
+    std::cout << "Iterations per Algorithm:" <<std::endl;
+    int iterations = 1000;
+    std::cin>>iterations;
+
+    auto rectList2(rectList);
+    sort_area_dec(rectList2);
+    std::vector<rbp::MaxRectsBinPack> binPackList;
+
+    while(iterations--) {
+        std::cout << " --------- RectBestShortSideFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBestShortSideFit)));
+
+        std::cout << " --------- RectBestLongSideFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBestLongSideFit)));
+
+        std::cout << " --------- RectBestAreaFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBestAreaFit)));
+
+        std::cout << " --------- RectBottomLeftRule ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBottomLeftRule)));
+
+        std::cout << " --------- RectContactPointRule ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectContactPointRule)));
+
+        // disable flip
+        std::cout << " --------- RectBestShortSideFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBestShortSideFit, false)));
+
+        std::cout << " --------- RectBestLongSideFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBestLongSideFit, false)));
+
+        std::cout << " --------- RectBestAreaFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBestAreaFit, false)));
+
+        std::cout << " --------- RectBottomLeftRule ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBottomLeftRule, false)));
+
+        std::cout << " --------- RectContactPointRule ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectContactPointRule, false)));
+
+        shuffle_vector(rectList);
+
+        //sort from biggest to small area;
+
+
+        std::cout << " --------- RectBestShortSideFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit)));
+
+        std::cout << " --------- RectBestLongSideFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit)));
+
+        std::cout << " --------- RectBestAreaFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit)));
+
+        std::cout << " --------- RectBottomLeftRule ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule)));
+
+        std::cout << " --------- RectContactPointRule ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectContactPointRule)));
+
+        // disable flip
+        std::cout << " --------- RectBestShortSideFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit, false)));
+
+        std::cout << " --------- RectBestLongSideFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit, false)));
+
+        std::cout << " --------- RectBestAreaFit ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit, false)));
+
+        std::cout << " --------- RectBottomLeftRule ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule, false)));
+
+        std::cout << " --------- RectContactPointRule ---------" << std::endl;
+        binPackList.push_back(std::move(OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectContactPointRule, false)));
+
     }
 
-    auto rectList = loader.load();
-    auto rectList2 = rectList;
 
-    std::cout << " --------- RectBestShortSideFit ---------" << std::endl;
-    rbp::MaxRectsBinPack bin1 = OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBestShortSideFit);
+    std::cout<<std::endl<<"Bin Pack results square:" <<std::endl;
+    int i = 0;
+    int best_side = std::numeric_limits<int>::max();
+    std::vector<int> best_index;
+    for( auto bp : binPackList) {
+        int side = square_side(bp.GetUsedRectangles());
 
-    std::cout << " --------- RectBestLongSideFit ---------" << std::endl;
-    rbp::MaxRectsBinPack bin2 = OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBestLongSideFit);
-
-    std::cout << " --------- RectBestAreaFit ---------" << std::endl;
-    rbp::MaxRectsBinPack bin3 = OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBestAreaFit);
-
-    std::cout << " --------- RectBottomLeftRule ---------" << std::endl;
-    rbp::MaxRectsBinPack bin4 = OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectBottomLeftRule);
-
-    std::cout << " --------- RectContactPointRule ---------" << std::endl;
-    rbp::MaxRectsBinPack bin5 = OneByOneMaxPack(rectList, rbp::MaxRectsBinPack::RectContactPointRule);
-
-    //sort by area;
-    sort_area_dec(rectList2);
-    std::cout << " --------- RectBestShortSideFit ---------" << std::endl;
-    rbp::MaxRectsBinPack bin6 = OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit);
-
-    std::cout << " --------- RectBestLongSideFit ---------" << std::endl;
-    rbp::MaxRectsBinPack bin7 = OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit);
-
-    std::cout << " --------- RectBestAreaFit ---------" << std::endl;
-    rbp::MaxRectsBinPack bin8 = OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit);
-
-    std::cout << " --------- RectBottomLeftRule ---------" << std::endl;
-    rbp::MaxRectsBinPack bin9 = OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule);
-
-    std::cout << " --------- RectContactPointRule ---------" << std::endl;
-    rbp::MaxRectsBinPack bin10 = OneByOneMaxPack(rectList2, rbp::MaxRectsBinPack::RectContactPointRule);
+        if(side <= best_side){
+            best_side = side;
+            best_index.push_back(i);
+        }
+        std::cout<<" binpack["<<(i++)<<"] = "<<square_side(bp.GetUsedRectangles())<<std::endl;
+    }
 
 
-
-    //std::vector<Rect> destination;
-    //bin.Insert(rectList, destination, MaxRectsBinPack::RectBestShortSideFit);
+    std::cout<<std::endl<<"Best bin pack results:" <<std::endl;
+    for( auto index : best_index) {
+        std::cout << " binpack[" << index << "] = " << best_side << std::endl;
+        auto result = binPackList[index].GetUsedRectangles();
+        std::string flipped = binPackList[index].AllowFlip()?"flip":"disabled";
+        std::cout<<"Flipped:"<<flipped<<std::endl;
+        std::cout<<"Heuristic:"<<binPackList[index].UsedHeuristic()<<std::endl;
+    }
 
     return 0;
 }
 
-rbp::MaxRectsBinPack OneByOneMaxPack(const std::vector<Rect> &rectList, rbp::MaxRectsBinPack::FreeRectChoiceHeuristic method) {
+rbp::MaxRectsBinPack OneByOneMaxPack(const std::vector<Rect> &rectList, rbp::MaxRectsBinPack::FreeRectChoiceHeuristic method, bool allow_flip) {
     rbp::MaxRectsBinPack bin;
     int maxWidth = sum_width(rectList);
     int maxHeight = sum_height(rectList);
@@ -74,7 +151,7 @@ rbp::MaxRectsBinPack OneByOneMaxPack(const std::vector<Rect> &rectList, rbp::Max
     else
         maxHeight = maxWidth;
 
-    bin.Init(maxWidth, maxHeight);
+    bin.Init(maxWidth, maxHeight, allow_flip);
 
     std::cout << "-> will initialized with: "<<std::to_string(maxWidth)<<"x"<< std::to_string(maxHeight)<< std::endl;
     for(auto rect : rectList) {

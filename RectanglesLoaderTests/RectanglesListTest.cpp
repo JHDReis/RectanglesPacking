@@ -26,6 +26,7 @@ public:
     }
 
     std::vector<Rect> _rectangle1;
+
 };
 
 TEST_F(RectanglesListTest, calculate_max_width) {
@@ -79,5 +80,15 @@ TEST_F(RectanglesListTest, sorting_area_dec) {
     EXPECT_EQ(_rectangle1[0].area(), 4);
     EXPECT_EQ(_rectangle1[1].area(), 3);
     EXPECT_EQ(_rectangle1[2].area(), 2);
+}
+
+TEST_F(RectanglesListTest, get_smallest_area){
+    std::vector<Rect> rectangle;           //   _  _ _
+    rectangle.emplace_back(Rect(2,1,1,0)); //  |_||_|_| 3x3
+    rectangle.emplace_back(Rect(1,3,0,0)); //  |_||_|_|
+    rectangle.emplace_back(Rect(2,1,1,1)); //  |_|
+
+    int side = square_side(rectangle);
+    ASSERT_EQ(side*side, 9);
 }
 

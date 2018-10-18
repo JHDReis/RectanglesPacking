@@ -32,6 +32,7 @@ public:
 	/// Specifies the different heuristic rules that can be used when deciding where to place a new rectangle.
 	enum FreeRectChoiceHeuristic
 	{
+		Uncertain, ///<- if squares are inserted one by one we cannot be certain of the Heuristic being used
 		RectBestShortSideFit, ///< -BSSF: Positions the rectangle against the short side of a free rectangle into which it fits the best.
 		RectBestLongSideFit, ///< -BLSF: Positions the rectangle against the long side of a free rectangle into which it fits the best.
 		RectBestAreaFit, ///< -BAF: Positions the rectangle into the smallest free rect into which it fits.
@@ -51,11 +52,18 @@ public:
 	/// Computes the ratio of used surface area to the total bin area.
 	float Occupancy() const;
 
+	std::vector<Rect> GetUsedRectangles();
+
+	bool AllowFlip() { return binAllowFlip;}
+	FreeRectChoiceHeuristic UsedHeuristic();
+
+
 private:
 	int binWidth;
 	int binHeight;
 
 	bool binAllowFlip;
+	FreeRectChoiceHeuristic heuristic;
 
 	std::vector<Rect> usedRectangles;
 	std::vector<Rect> freeRectangles;

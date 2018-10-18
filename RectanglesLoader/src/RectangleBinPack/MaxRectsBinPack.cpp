@@ -22,11 +22,11 @@ using namespace std;
 
 MaxRectsBinPack::MaxRectsBinPack()
 :binWidth(0),
-binHeight(0)
+binHeight(0), heuristic(Uncertain)
 {
 }
 
-MaxRectsBinPack::MaxRectsBinPack(int width, int height, bool allowFlip)
+MaxRectsBinPack::MaxRectsBinPack(int width, int height, bool allowFlip) : heuristic(Uncertain)
 {
 	Init(width, height, allowFlip);
 }
@@ -53,6 +53,7 @@ Rect MaxRectsBinPack::Insert(int width, int height, FreeRectChoiceHeuristic meth
 	int score2 = std::numeric_limits<int>::max();
 	switch(method)
 	{
+	    case Uncertain:  //force to use RectBestShortSideFit
 		case RectBestShortSideFit: newNode = FindPositionForNewNodeBestShortSideFit(width, height, score1, score2); break;
 		case RectBottomLeftRule: newNode = FindPositionForNewNodeBottomLeft(width, height, score1, score2); break;
 		case RectContactPointRule: newNode = FindPositionForNewNodeContactPoint(width, height, score1); break;
@@ -82,6 +83,7 @@ Rect MaxRectsBinPack::Insert(int width, int height, FreeRectChoiceHeuristic meth
 
 void MaxRectsBinPack::Insert(std::vector<Rect> &rects, std::vector<Rect> &dst, FreeRectChoiceHeuristic method)
 {
+	heuristic = method;
 	dst.clear();
 
 	while(!rects.empty())
@@ -140,6 +142,7 @@ Rect MaxRectsBinPack::ScoreRect(int width, int height, FreeRectChoiceHeuristic m
 	score2 = std::numeric_limits<int>::max();
 	switch(method)
 	{
+        case Uncertain:  //force to use RectBestShortSideFit
         case RectBestShortSideFit:
             newNode = FindPositionForNewNodeBestShortSideFit(width, height, score1, score2);
             break;
@@ -177,6 +180,11 @@ float MaxRectsBinPack::Occupancy() const
 
 	return (float)usedSurfaceArea / (binWidth * binHeight);
 }
+
+std::vector<Rect> MaxRectsBinPack::GetUsedRectangles() {
+	return usedRectangles;
+}
+
 
 Rect MaxRectsBinPack::FindPositionForNewNodeBottomLeft(int width, int height, int &bestY, int &bestX) const
 {
@@ -492,6 +500,10 @@ void MaxRectsBinPack::PruneFreeList()
 				--j;
 			}
 		}
+}
+
+MaxRectsBinPack::FreeRectChoiceHeuristic MaxRectsBinPack::UsedHeuristic() {
+	return RectBestAreaFit;
 }
 
 }

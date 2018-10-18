@@ -7,6 +7,7 @@
 #include <numeric>
 #include <algorithm>
 #include <iterator>
+#include <random>
 
 int biggest_width(const std::vector<Rect> &rectangles) {
      auto f = std::max_element(rectangles.begin(), rectangles.end(),
@@ -67,13 +68,24 @@ int area(const std::vector<Rect> &rectangles) {
     return ( max_bottom(rectangles) * max_right(rectangles));
 }
 
-
 void sort_area_dec(std::vector<Rect> &rectangles) {
     std::sort(rectangles.begin(), rectangles.end(),
                             [](Rect const& a, Rect const& b)
                             {
                                 return b.area() < a.area();
                             });
+}
+
+void shuffle_vector(std::vector<Rect> &rectangles) {
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(rectangles.begin(), rectangles.end(), g);
+}
+
+int square_side(const std::vector<Rect> &vector) {
+    int right = max_right(vector);
+    int bottom = max_bottom(vector);
+    return right > bottom? right : bottom;
 }
 
 

@@ -4,38 +4,56 @@
 
 #include "RectanglesList.h"
 #include "Rect.h"
+#include <numeric>
+#include <algorithm>
 
-
-RectanglesList::RectanglesList() {
-    _max_y = 0;
-    _max_x = 0;
+int max_width(const std::vector<Rect> &rectangles) {
+    return std::accumulate(rectangles.begin(), rectangles.end(), 0,
+                            [](int a, Rect b)
+                            {
+                                a += b.width();
+                                return a;
+                            });
 }
 
-void RectanglesList::load(std::vector<Rect> &rectangles) {
-    _rectangles = rectangles;
-
-    for(auto const& r : _rectangles){
-        _max_x += r.width();
-        _max_y += r.height();
-    }
+int max_height(const std::vector<Rect> &rectangles) {
+    return std::accumulate(rectangles.begin(), rectangles.end(), 0,
+                            [](int a, Rect b)
+                            {
+                                a += b.height();
+                                return a;
+                            });
 }
 
-int RectanglesList::size() {
-    return _rectangles.size();
+int max_right(const std::vector<Rect> &rectangles) {
+    auto result =  std::max_element(rectangles.begin(), rectangles.end()
+                         , [](const Rect& a, const Rect& b)
+                         {
+                             return a.x_right() < b.x_right();
+                         } );
+    return result->x_right();
 }
 
-int RectanglesList::max_width() {
-    return _max_x;
+int max_bottom(const std::vector<Rect> &rectangles) {
+    auto result =  std::max_element(rectangles.begin(), rectangles.end()
+                                    , [](const Rect& a, const Rect& b)
+                                    {
+                                        return a.y_bottom() < b.y_bottom();
+                                    } );
+    return result->y_bottom();
 }
 
-int RectanglesList::max_height() {
-    return _max_y;
-}
-
-std::vector<Rect> RectanglesList::get_list() {
-    return _rectangles;
+int area(const std::vector<Rect> &rectangles) {
+    return ( max_bottom(rectangles) * max_right(rectangles));
 }
 
 
+void sort_area_dec(std::vector<Rect> &rectangles) {
+    std::sort(rectangles.begin(), rectangles.end(),
+                            [](Rect const& a, Rect const& b)
+                            {
+                                return b.area() < a.area();
+                            });
+}
 
 

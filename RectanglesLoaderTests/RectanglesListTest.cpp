@@ -28,53 +28,56 @@ public:
     std::vector<Rect> _rectangle1;
 };
 
-
-TEST_F(RectanglesListTest, rectangles_is_moving) {
-    //prepare
-    RectanglesList rList;
-
-    //act
-    rList.load(_rectangle1);
-
-    //assert
-    EXPECT_EQ(_rectangle1.size(), 3);
+TEST_F(RectanglesListTest, calculate_max_width) {
+    int maxwidth = max_width(_rectangle1);
+    EXPECT_EQ(maxwidth, 9);
 }
 
 
-TEST_F(RectanglesListTest, rectangles_size_is_3) {
-    //prepare
-    RectanglesList rList;
+TEST_F(RectanglesListTest, calculate_max_height) {
+    int maxHeight = max_height(_rectangle1);
+    EXPECT_EQ(maxHeight, 3);
+}
 
-    //act
-    rList.load(_rectangle1);
-    auto result = rList.size();
+TEST_F(RectanglesListTest, calculate_max_right) {
+    int maxRight = max_right(_rectangle1);
+    EXPECT_EQ(maxRight, 4);
+}
 
-    //assert
-    EXPECT_EQ(result, 3);
+TEST_F(RectanglesListTest, calculate_max_right2) {
+    _rectangle1.push_back( Rect(2,1,5,0));
+    int maxRight = max_right(_rectangle1);
+    EXPECT_EQ(maxRight, 7);
 }
 
 
-TEST_F(RectanglesListTest, rectangles_max_width_is_9) {
-    //prepare
-    RectanglesList rList;
+TEST_F(RectanglesListTest, calculate_max_bottom) {
+    int maxBottom = max_bottom(_rectangle1);
+    EXPECT_EQ(maxBottom, 1);
+}
 
-    //act
-    rList.load(_rectangle1);
-    auto result = rList.max_width();
-
-    //assert
-    EXPECT_EQ(result, 9);
+TEST_F(RectanglesListTest, calculate_max_bottom2) {
+    _rectangle1.push_back( Rect(2,1,0,5));
+    int maxBottom = max_bottom(_rectangle1);
+    EXPECT_EQ(maxBottom, 6);
 }
 
 
-TEST_F(RectanglesListTest, rectangles_max_width_is_3) {
-    //prepare
-    RectanglesList rList;
-
-    //act
-    rList.load(_rectangle1);
-    auto result = rList.max_height();
-
-    //assert
-    EXPECT_EQ(result, 3);
+TEST_F(RectanglesListTest, calculate_area_is_4) {
+    int a = area(_rectangle1);
+    EXPECT_EQ(a, 4);
 }
+
+TEST_F(RectanglesListTest, calculate_max_bottom_is_24) {
+    _rectangle1.push_back( Rect(2,1,0,5));
+    int a = area(_rectangle1);
+    EXPECT_EQ(a, 24);
+}
+
+TEST_F(RectanglesListTest, sorting_area_dec) {
+    sort_area_dec(_rectangle1);
+    EXPECT_EQ(_rectangle1[0].area(), 4);
+    EXPECT_EQ(_rectangle1[1].area(), 3);
+    EXPECT_EQ(_rectangle1[2].area(), 2);
+}
+

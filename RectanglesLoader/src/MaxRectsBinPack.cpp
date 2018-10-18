@@ -173,7 +173,7 @@ float MaxRectsBinPack::Occupancy() const
 {
 	unsigned long usedSurfaceArea = 0;
 	for(size_t i = 0; i < usedRectangles.size(); ++i)
-		usedSurfaceArea += usedRectangles[i].width() * usedRectangles[i].height();
+		usedSurfaceArea += usedRectangles[i].area();
 
 	return (float)usedSurfaceArea / (binWidth * binHeight);
 }
@@ -410,9 +410,6 @@ bool MaxRectsBinPack::SplitFreeNode(Rect freeNode, const Rect &usedNode)
 	// Test with SAT if the rectangles even intersect.
 	if(!usedNode.overlaps(freeNode))
 	    return false;
-//	if (usedNode.x() >= freeNode.x_right() || usedNode.x_right() <= freeNode.x() ||
-//		usedNode.y() >= freeNode.y_bottom() || usedNode.y_bottom() <= freeNode.y())
-//		return false;
 
 	if (usedNode.x() < freeNode.x() + freeNode.width() && usedNode.x() + usedNode.width() > freeNode.x())
 	{

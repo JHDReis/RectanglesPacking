@@ -5,26 +5,20 @@
 #ifndef RECTANGULESPACKING_RECTANGLESLIST_H
 #define RECTANGULESPACKING_RECTANGLESLIST_H
 
-
 #include <vector>
-
 class Rect;
-class RectanglesList{
 
-public:
-    RectanglesList();
-    void load(std::vector<Rect>& rectangles);
-    int size();
-    int max_width();
-    int max_height();
+int max_width(const std::vector<Rect> & rectangles);
 
-    std::vector<Rect> get_list();
+int max_height(const std::vector<Rect> &rectangles);
 
-private:
-    std::vector<Rect> _rectangles;
-    int _max_x;
-    int _max_y;
-};
+int max_right(const std::vector<Rect> &rectangles);
+
+int max_bottom(const std::vector<Rect> &rectangles);
+
+int area(const std::vector<Rect> &rectangles);
+
+void sort_area_dec(std::vector<Rect> &rectangles);
 
 
 #endif //RECTANGULESPACKING_RECTANGLESLIST_H

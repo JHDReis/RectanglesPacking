@@ -33,6 +33,11 @@ int Rect::y_bottom() const {
     return _y + _height;
 }
 
+
+int Rect::area() const {
+    return _height * _width;
+}
+
 //setters
 void Rect::set_dimension(int width, int height) {
     _width = width;

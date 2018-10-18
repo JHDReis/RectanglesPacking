@@ -21,6 +21,9 @@ public:
     //copy assigment
     Rect& operator=(const Rect& other);
 
+    //enable swap
+
+
     //getters
     int width() const {return _width;}
     int height() const {return _height;}
@@ -28,6 +31,7 @@ public:
     int y() const {return _y;}
     int x_right() const;
     int y_bottom() const;
+    int area() const;
 
     //setters
     void set_width(int width) {_width = width;}

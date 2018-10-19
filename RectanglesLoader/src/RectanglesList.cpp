@@ -82,9 +82,9 @@ void shuffle_vector(std::vector<Rect> &rectangles) {
     std::shuffle(rectangles.begin(), rectangles.end(), g);
 }
 
-int square_side(const std::vector<Rect> &vector) {
-    int right = max_right(vector);
-    int bottom = max_bottom(vector);
+int square_side(const std::vector<Rect> &rectangles) {
+    int right = max_right(rectangles);
+    int bottom = max_bottom(rectangles);
     return right > bottom? right : bottom;
 }
 

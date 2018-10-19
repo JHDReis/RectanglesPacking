@@ -52,7 +52,7 @@ public:
 	/// Computes the ratio of used surface area to the total bin area.
 	float Occupancy() const;
 
-	std::vector<Rect> GetUsedRectangles();
+	std::vector<Rect> GetUsedRectangles() const;
 
 	bool AllowFlip() { return binAllowFlip;}
 	FreeRectChoiceHeuristic UsedHeuristic();

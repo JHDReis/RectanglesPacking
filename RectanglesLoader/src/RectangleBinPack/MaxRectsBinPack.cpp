@@ -181,7 +181,7 @@ float MaxRectsBinPack::Occupancy() const
 	return (float)usedSurfaceArea / (binWidth * binHeight);
 }
 
-std::vector<Rect> MaxRectsBinPack::GetUsedRectangles() {
+std::vector<Rect> MaxRectsBinPack::GetUsedRectangles() const{
 	return usedRectangles;
 }
 

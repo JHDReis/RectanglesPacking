@@ -26,8 +26,7 @@ void sort_area_dec(std::vector<Rect> &rectangles);
 
 void shuffle_vector(std::vector<Rect> &rectangles);
 
-int square_side(const std::vector<Rect> &vector);
-
+int square_side(const std::vector<Rect> &rectangles);
 
 
 #endif //RECTANGULESPACKING_RECTANGLESLIST_H

@@ -7,10 +7,8 @@
 #include "RectangleBinPack/MaxRectsBinPack.h"
 #include "RectLoader.h"
 #include "RectanglesList.h"
+#include "BinPackHelper.h"
 
-rbp::MaxRectsBinPack OneByOneMaxPack(const std::vector<Rect> &rectList
-        , rbp::MaxRectsBinPack::FreeRectChoiceHeuristic method
-        , bool allow_flip = true);
 
 int main() {
     std::cout << "Max Rectangles Bin Algorithm!" << std::endl;
@@ -114,53 +112,24 @@ int main() {
     }
 
 
-    std::cout<<std::endl<<"Bin Pack results square:" <<std::endl;
-    int i = 0;
-    int best_side = std::numeric_limits<int>::max();
-    std::vector<int> best_index;
-    for( auto bp : binPackList) {
-        int side = square_side(bp.GetUsedRectangles());
+    auto minBinPack = get_minArea(binPackList);
+    auto min_side = square_side(minBinPack.GetUsedRectangles());
+    std::cout<<"Minimum square side results are: " <<min_side<<std::endl;
 
-        if(side <= best_side){
-            best_side = side;
-            best_index.push_back(i);
-        }
-        std::cout<<" binpack["<<(i++)<<"] = "<<square_side(bp.GetUsedRectangles())<<std::endl;
-    }
+
+    std::vector<rbp::MaxRectsBinPack> matches = get_bins_minSide(binPackList, min_side);
 
 
     std::cout<<std::endl<<"Best bin pack results:" <<std::endl;
-    for( auto index : best_index) {
-        std::cout << " binpack[" << index << "] = " << best_side << std::endl;
-        auto result = binPackList[index].GetUsedRectangles();
-        std::string flipped = binPackList[index].AllowFlip()?"flip":"disabled";
+    for( auto bp : matches) {
+        auto result = square_side(bp.GetUsedRectangles());
+        std::string flipped = bp.AllowFlip()?"flip":"disabled";
         std::cout<<"Flipped:"<<flipped<<std::endl;
-        std::cout<<"Heuristic:"<<binPackList[index].UsedHeuristic()<<std::endl;
+        std::cout<<"Heuristic:"<<bp.UsedHeuristic()<<std::endl;
+        std::cout<<"square "<<result<<"x"<<result<<std::endl;
     }
 
     return 0;
 }
 
-rbp::MaxRectsBinPack OneByOneMaxPack(const std::vector<Rect> &rectList, rbp::MaxRectsBinPack::FreeRectChoiceHeuristic method, bool allow_flip) {
-    rbp::MaxRectsBinPack bin;
-    int maxWidth = sum_width(rectList);
-    int maxHeight = sum_height(rectList);
-
-    if(maxHeight > maxWidth)
-        maxWidth = maxHeight;
-    else
-        maxHeight = maxWidth;
-
-    bin.Init(maxWidth, maxHeight, allow_flip);
-
-    std::cout << "-> will initialized with: "<<std::to_string(maxWidth)<<"x"<< std::to_string(maxHeight)<< std::endl;
-    for(auto rect : rectList) {
-        std::cout << "-> before " << rect.width() << "x" << rect.height() << " (" << rect.x() << "," << rect.y() << ")" << std::endl;
-        Rect result = bin.Insert(rect.width(), rect.height(), method);
-        std::cout << "-> after " << result.width() << "x" << result.height() << " (" << result.x() << "," << result.y() << ")" << std::endl;
-        auto free_space = 100.f - bin.Occupancy()*100.f;
-        std::cout << "free space:" << free_space << std::endl;
-    }
-    return bin;
-}
 

@@ -4,7 +4,8 @@
 
 #include <iostream>
 #include <limits>
-#include <BinPackHelper.h>
+#include <chrono>
+#include "BinPackHelper.h"
 #include "RectangleBinPack/MaxRectsBinPack.h"
 #include "RectLoader.h"
 #include "RectanglesList.h"
@@ -29,7 +30,10 @@ int main() {
         rectList = loader.load();
     }
     else if(choice == 1) {
-        rectList = RectLoader::load_rand(100);
+        std::cout << "insert max rect and max rand number" << std::endl;
+        int rectangles, max_rand;
+        std::cin>>rectangles>>max_rand;
+        rectList = RectLoader::load_rand(rectangles, max_rand);
     } else
         return 1;
 
@@ -37,14 +41,18 @@ int main() {
     std::cout << "Iterations per Algorithm:" <<std::endl;
     int iterations = 1000;
     std::cin>>iterations;
+    int it_ordered = iterations;
 
     auto rectList2(rectList);
     sort_area_dec(rectList2);
 
     BinPackHelper bph;
+    BinPackHelper bph_ordered;
 
+    std::chrono::milliseconds total;
+    std::chrono::milliseconds loop_duration;
     while(iterations--) {
-        std::cout<<iterations<<"..."<<std::endl;
+        auto start = std::chrono::high_resolution_clock::now();
         bph.add(rectList, rbp::MaxRectsBinPack::RectBestShortSideFit, false);
         bph.add(rectList, rbp::MaxRectsBinPack::RectBestShortSideFit, true);
 
@@ -62,26 +70,49 @@ int main() {
 
         shuffle_vector(rectList);
 
-        //Ordered vectors (Biggest Area >> Smallest Area
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit, false);
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit, true);
-
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit, false);
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit, true);
-
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit, false);
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit, true);
-
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule, false);
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule, true);
-
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectContactPointRule, false);
-        bph.add(rectList2, rbp::MaxRectsBinPack::RectContactPointRule, true);
+        loop_duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+        total += loop_duration;
+        std::cout<<iterations<<" loop:"<<loop_duration.count()<<" ms - total:"<<total.count()<<" ms"<<std::endl;
     }
 
 
-    std::cout<<std::endl<<"1 Best bin pack results:" <<std::endl;
+    while(it_ordered--) {
+        auto start = std::chrono::high_resolution_clock::now();
+        //Ordered vectors (Biggest Area >> Smallest Area
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit, false);
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit, true);
+
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit, false);
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit, true);
+
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit, false);
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit, true);
+
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule, false);
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule, true);
+
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectContactPointRule, false);
+        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectContactPointRule, true);
+
+        loop_duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+        total += loop_duration;
+        std::cout<<it_ordered<<" loop:"<<loop_duration.count()<<" ms - total:"<<total.count()<<" ms"<<std::endl;
+    }
+
+
+    std::cout<<std::endl<<"Shuffled Best bin pack results:" <<std::endl;
     for( auto bp : bph.get_smallest_squares()) {
+        auto result = square_side(bp.GetUsedRectangles());
+        std::string flipped = bp.AllowFlip()?"allow":"disabled";
+        std::cout<<"------------------------------"<<std::endl;
+        std::cout<<"Flipped:"<<flipped<<std::endl;
+        std::cout<<"Heuristic:"<<heuristic_to_string(bp.UsedHeuristic())<<std::endl;
+        std::cout<<"square "<<result<<"x"<<result<<std::endl;
+    }
+
+
+    std::cout<<std::endl<<"Ordered Best bin pack results:" <<std::endl;
+    for( auto bp : bph_ordered.get_smallest_squares()) {
         auto result = square_side(bp.GetUsedRectangles());
         std::string flipped = bp.AllowFlip()?"allow":"disabled";
         std::cout<<"------------------------------"<<std::endl;

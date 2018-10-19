@@ -47,7 +47,7 @@ public:
 	void Insert(std::vector<Rect> &rects, std::vector<Rect> &dst, FreeRectChoiceHeuristic method);
 
 	/// Inserts a single rectangle into the bin, possibly rotated.
-	Rect Insert(int width, int height, FreeRectChoiceHeuristic method);
+	void Insert(int width, int height, FreeRectChoiceHeuristic method);
 
 	/// Computes the ratio of used surface area to the total bin area.
 	float Occupancy() const;

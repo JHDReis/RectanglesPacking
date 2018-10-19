@@ -45,7 +45,7 @@ void MaxRectsBinPack::Init(int width, int height, bool allowFlip)
 	freeRectangles.push_back(n);
 }
 
-Rect MaxRectsBinPack::Insert(int width, int height, FreeRectChoiceHeuristic method)
+void MaxRectsBinPack::Insert(int width, int height, FreeRectChoiceHeuristic method)
 {
 	Rect newNode;
 	// Unused in this function. We don't need to know the score after finding the position.
@@ -62,7 +62,7 @@ Rect MaxRectsBinPack::Insert(int width, int height, FreeRectChoiceHeuristic meth
 	}
 		
 	if (newNode.height() == 0)
-		return newNode;
+		return;
 
 	size_t numRectanglesToProcess = freeRectangles.size();
 	for(size_t i = 0; i < numRectanglesToProcess; ++i)
@@ -74,11 +74,8 @@ Rect MaxRectsBinPack::Insert(int width, int height, FreeRectChoiceHeuristic meth
 			--numRectanglesToProcess;
 		}
 	}
-
 	PruneFreeList();
-
-	usedRectangles.push_back(newNode);
-	return newNode;
+	usedRectangles.push_back(std::move(newNode));
 }
 
 void MaxRectsBinPack::Insert(std::vector<Rect> &rects, std::vector<Rect> &dst, FreeRectChoiceHeuristic method)

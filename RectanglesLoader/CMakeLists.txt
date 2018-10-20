@@ -10,9 +10,9 @@ add_library(rectanglesLoader_lib
             src/RectanglesList.h
             src/BinPackHelper.h
             src/BinPackHelper.cpp
-            src/TerminalPrint.cpp
-            src/TerminalPrint.h
-            src/IPrint.h
+        src/print/TerminalPrint.cpp
+        src/print/TerminalPrint.h
+        src/print/IPrint.h
             src/RectangleBinPack/MaxRectsBinPack.h
             src/RectangleBinPack/MaxRectsBinPack.cpp
             )

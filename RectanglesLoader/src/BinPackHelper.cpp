@@ -17,6 +17,9 @@ void BinPackHelper::add(const std::vector<Rect> &rectList, rbp::MaxRectsBinPack:
     int maxWidth = sum_width(rectList);
     int maxHeight = sum_height(rectList);
 
+    //calculate the biggest square you can have using all the rectangles
+    //the flipping of the rectangles should not affect much this logic,
+    // I think only in extreme cases
     if(maxHeight > maxWidth)
         maxWidth = maxHeight;
     else
@@ -52,8 +55,6 @@ std::vector<rbp::MaxRectsBinPack> BinPackHelper::get_smallest_squares() {
     auto min_side = square_side(min_bin.GetUsedRectangles());
     return get_bins_minSide(_binPackList, min_side);
 }
-
-
 
 
 //Get all the packs with the minimum side in a vector

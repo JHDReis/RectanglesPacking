@@ -3,6 +3,7 @@ Find the best solution and algorithms to pack rectangles in a square box.
 
 ### Tools
 CMake ``3.12.3``.
+
 CMake Standard: ``C++17``.
 
 ### MaxRectsBinPack
@@ -20,8 +21,11 @@ This will be my next step, to add this C++ header library to the project and tes
 
 #### References
 https://github.com/juj/RectangleBinPack
+
 https://wiki.unity3d.com/index.php/MaxRectsBinPack
+
 https://github.com/TeamHypersomnia/rectpack2D
+
 http://hypersomnia.xyz/
 
 ### Documentation

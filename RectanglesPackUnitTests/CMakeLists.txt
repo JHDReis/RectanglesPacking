@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(RectanglesLoaderTests)
+project(RectanglesPackUnitTests)
 
 #including the source files from library to be tested
 include_directories(${RECT_LOADER_SRC})
@@ -20,4 +20,4 @@ add_executable(run_tests basic_check.cpp
                         RectanglesListTest.cpp)
 
 target_link_libraries(run_tests gtest gtest_main)
-target_link_libraries(run_tests rectanglesLoader_lib)
+target_link_libraries(run_tests rectanglesPack_lib)

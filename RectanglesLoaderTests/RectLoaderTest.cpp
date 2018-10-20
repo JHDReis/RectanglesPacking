@@ -36,7 +36,7 @@ TEST_F(RectLoaderTest, rectLoader) {
    RectLoader rl(_test1file);
 
    //assert
-   ASSERT_EQ(_test1file, rl.get_filepath());
+   ASSERT_EQ(_test1file, rl.get_file_path());
 }
 
 TEST_F(RectLoaderTest, file_exists) {

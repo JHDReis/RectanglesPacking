@@ -11,19 +11,19 @@
 #include <fstream>
 
 class Rect;
-
 class RectLoader {
-
 public:
     explicit RectLoader(const std::string& filePath);
+    ~RectLoader() = default;
+    
     std::vector<Rect> load();
     static std::vector<Rect> load_rand(int max_rectangles, int max_rand = 100);
-    std::string get_filepath();
+    std::string get_file_path();
     bool is_valid_file();
 
 private:
     RectLoader() = default;
-    std::string _filepath;
+    std::string _file_path;
 };
 
 

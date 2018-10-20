@@ -6,6 +6,10 @@
 #include "TerminalPrint.h"
 #include "Rect.h"
 
+void TerminalPrint::load(const std::vector<Rect> &rectangles) {
+    _rectangles = rectangles;
+}
+
 void TerminalPrint::print() {
 
     std::cout<<"---- rectangles ("<< std::to_string(_rectangles.size()) <<") --------------"<<std::endl;
@@ -17,14 +21,4 @@ void TerminalPrint::print() {
 
 }
 
-int TerminalPrint::get_left() {
-    return 0;
-}
 
-int TerminalPrint::get_bottom() {
-    return 0;
-}
-
-void TerminalPrint::load(const std::vector<Rect> &rectangles) {
-    _rectangles = rectangles;
-}

@@ -12,17 +12,17 @@ bool file_exist(const std::string &name) {
 }
 
 
-RectLoader::RectLoader(const std::string& filePath):_filepath(filePath){
+RectLoader::RectLoader(const std::string& filePath):_file_path(filePath){
     if(!is_valid_file())
-        _filepath.clear();
+        _file_path.clear();
 }
 
 std::vector<Rect>RectLoader::load() {
-    if(_filepath.empty())
+    if(_file_path.empty())
         return {};
 
     std::vector<Rect> result;
-    std::ifstream infile(_filepath);
+    std::ifstream infile(_file_path);
     int a,b;
     while(infile>>a>>b){
         if(a < 1 || b < 1) continue;
@@ -50,13 +50,13 @@ std::vector<Rect> RectLoader::load_rand(int max_rectangles, int max_rand) {
 }
 
 
-std::string RectLoader::get_filepath() {
-    return _filepath;
+std::string RectLoader::get_file_path() {
+    return _file_path;
 }
 
 bool RectLoader::is_valid_file() {
-    if(_filepath.empty()) return false;
-    return file_exist(_filepath);
+    if(_file_path.empty()) return false;
+    return file_exist(_file_path);
 }
 
 

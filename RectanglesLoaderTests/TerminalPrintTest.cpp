@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 #include "Rect.h"
-#include "TerminalPrint.h"
+#include "print/TerminalPrint.h"
 
 
 class TerminalPrintTest : public ::testing::Test {

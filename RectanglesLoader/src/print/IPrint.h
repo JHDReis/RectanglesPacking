@@ -11,8 +11,6 @@ public:
     ~IPrint() = default;
     virtual void load(const std::vector<Rect>& rectangles)=0;
     virtual void print() = 0;
-    virtual int get_left() = 0;
-    virtual int get_bottom() = 0;
 };
 
 #endif //RECTANGULESPACKING_IPRINT_H

@@ -8,7 +8,6 @@
 #include <future>
 #include <thread>
 #include "BinPackHelper.h"
-#include "RectangleBinPack/MaxRectsBinPack.h"
 #include "RectLoader.h"
 #include "RectanglesList.h"
 

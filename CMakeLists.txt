@@ -12,7 +12,7 @@ add_subdirectory(RectanglesLoaderTests)
 
 add_executable(rectangules_run main.cpp)
 
-add_executable(maxrectsbin_run MaxRectsBin.cpp)
+add_executable(maxrectsbin_run maxRectsBinPackmain.cpp)
 
 #linking with the library
 TARGET_LINK_LIBRARIES(rectangules_run rectanglesLoader_lib)

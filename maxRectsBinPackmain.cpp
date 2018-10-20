@@ -5,6 +5,8 @@
 #include <iostream>
 #include <limits>
 #include <chrono>
+#include <future>
+#include <thread>
 #include "BinPackHelper.h"
 #include "RectangleBinPack/MaxRectsBinPack.h"
 #include "RectLoader.h"
@@ -46,62 +48,75 @@ int main() {
     auto rectList2(rectList);
     sort_area_dec(rectList2);
 
-    BinPackHelper bph;
+    BinPackHelper bph_shuffled;
     BinPackHelper bph_ordered;
 
-    std::chrono::milliseconds total;
-    std::chrono::milliseconds loop_duration;
-    while(iterations--) {
-        auto start = std::chrono::high_resolution_clock::now();
-        bph.add(rectList, rbp::MaxRectsBinPack::RectBestShortSideFit, false);
-        bph.add(rectList, rbp::MaxRectsBinPack::RectBestShortSideFit, true);
-
-        bph.add(rectList, rbp::MaxRectsBinPack::RectBestLongSideFit, false);
-        bph.add(rectList, rbp::MaxRectsBinPack::RectBestLongSideFit, true);
-
-        bph.add(rectList, rbp::MaxRectsBinPack::RectBestAreaFit, false);
-        bph.add(rectList, rbp::MaxRectsBinPack::RectBestAreaFit, true);
-
-        bph.add(rectList, rbp::MaxRectsBinPack::RectBottomLeftRule, false);
-        bph.add(rectList, rbp::MaxRectsBinPack::RectBottomLeftRule, true);
-
-        bph.add(rectList, rbp::MaxRectsBinPack::RectContactPointRule, false);
-        bph.add(rectList, rbp::MaxRectsBinPack::RectContactPointRule, true);
-
-        shuffle_vector(rectList);
-
-        loop_duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
-        total += loop_duration;
-        std::cout<<iterations<<" loop:"<<loop_duration.count()<<" ms - total:"<<total.count()<<" ms"<<std::endl;
-    }
 
 
-    while(it_ordered--) {
-        auto start = std::chrono::high_resolution_clock::now();
-        //Ordered vectors (Biggest Area >> Smallest Area
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit, false);
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit, true);
+    auto future_shuffled = std::async(std::launch::async, [&](){
+        std::chrono::milliseconds total;
+        std::chrono::milliseconds loop;
+        while(iterations--) {
+            auto start = std::chrono::high_resolution_clock::now();
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectBestShortSideFit, false);
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectBestShortSideFit, true);
 
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit, false);
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit, true);
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectBestLongSideFit, false);
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectBestLongSideFit, true);
 
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit, false);
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit, true);
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectBestAreaFit, false);
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectBestAreaFit, true);
 
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule, false);
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule, true);
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectBottomLeftRule, false);
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectBottomLeftRule, true);
 
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectContactPointRule, false);
-        bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectContactPointRule, true);
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectContactPointRule, false);
+            bph_shuffled.add(rectList, rbp::MaxRectsBinPack::RectContactPointRule, true);
 
-        loop_duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
-        total += loop_duration;
-        std::cout<<it_ordered<<" loop:"<<loop_duration.count()<<" ms - total:"<<total.count()<<" ms"<<std::endl;
-    }
+            shuffle_vector(rectList);
 
+            loop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+            total += loop;
+            if(iterations%10 == 0)
+                std::cout<<"[S] = "<<loop.count()<<std::endl;
+        }
+        std::cout<<iterations<<"shuffled loop:"<<total.count()<<" ms."<<std::endl;
+    });
+
+    auto future_ordered = std::async(std::launch::async, [&](){
+        std::chrono::milliseconds total;
+        std::chrono::milliseconds loop;
+        while(it_ordered--) {
+            auto start = std::chrono::high_resolution_clock::now();
+            //Ordered vectors (Biggest Area >> Smallest Area
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit, false);
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestShortSideFit, true);
+
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit, false);
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestLongSideFit, true);
+
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit, false);
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBestAreaFit, true);
+
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule, false);
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectBottomLeftRule, true);
+
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectContactPointRule, false);
+            bph_ordered.add(rectList2, rbp::MaxRectsBinPack::RectContactPointRule, true);
+
+            loop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+            total += loop;
+            if(it_ordered%10 == 0)
+                std::cout<<"[O] = "<<loop.count()<<std::endl;
+        }
+        std::cout<<iterations<<"shuffled loop:"<<total.count()<<" ms."<<std::endl;
+    });
+
+    future_shuffled.wait();
+    future_ordered.wait();
 
     std::cout<<std::endl<<"Shuffled Best bin pack results:" <<std::endl;
-    for( auto bp : bph.get_smallest_squares()) {
+    for( auto bp : bph_shuffled.get_smallest_squares()) {
         auto result = square_side(bp.GetUsedRectangles());
         std::string flipped = bp.AllowFlip()?"allow":"disabled";
         std::cout<<"------------------------------"<<std::endl;
